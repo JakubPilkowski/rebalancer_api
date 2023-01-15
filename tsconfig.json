@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    // "allowUnreachableCode": false,
+    // "allowUnusedLabels": false,
+    // EXPERIMENTAL (used in optional rules when value is union type)
+    // checks whether user provide 'undefined' as value of this type
+    // if yes then throws error
+    // "exactOptionalPropertyTypes": true,
+    // report errors when switch case doesn't have break; or return; statements
+    // "noFallthroughCasesInSwitch": true,
+    // "noImplicitAny": true,
+    // probably useless in this app (we won't create classes)
+    // "noImplicitOverride": true,
+    // "noImplicitReturns": true,
+    // probably useless in this app (we won't create classes)
+    // "noImplicitThis": true,
+    // turn on all 'strict' related options
+    "strict": true,
+    // we can omit additional syntax (: unknown) in catch clause
+    // "useUnknownInCatchVariables": true,
+    // "strictPropertyInitialization": true,
+    "baseUrl": "./src",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    // allow .json files and type check them
+    "resolveJsonModule": true,
+    "allowJs": true,
+    // "checkJs": true,
+    // allow defualt import instead of 'import * as ModuleName from '''
+    // "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "jsx": "react",
+    // "noEmit": true,
+    "target": "ES5"
+    // "sourceMap": true
+    // "declaration": true,
+    // "declarationDir": "./src/types",
+    // "declarationMap": true
+  },
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules", "./webpack.config.js"]
+}
