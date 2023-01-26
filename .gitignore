@@ -5,3 +5,4 @@ coverage
 # Local Netlify folder
 .netlify
 build
+functions
