@@ -3,8 +3,11 @@ dotenv.config();
 
 import mongoose, { Connection } from 'mongoose';
 
-// import express from 'express';
-// import bodyParser from 'body-parser';
+import express from 'express';
+import bodyParser from 'body-parser';
+import serverlessExpress from '@vendia/serverless-express';
+import { Handler, Context, Callback } from 'aws-lambda';
+
 // import http from 'http';
 // import serverless from 'serverless-http';
 
@@ -12,7 +15,7 @@ import mongoose, { Connection } from 'mongoose';
  * Apollo server
  */
 import { ApolloServer } from '@apollo/server';
-// import { expressMiddleware } from '@apollo/server/express4';
+import { expressMiddleware } from '@apollo/server/express4';
 // import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import { startServerAndCreateLambdaHandler, handlers } from '@as-integrations/aws-lambda';
 
@@ -50,9 +53,9 @@ const connectDatabase = async (): Promise<Connection> => {
 };
 
 // const startApplication = async (): Promise<Express.Application> => {
-connectDatabase();
+// connectDatabase();
 
-// const app = express();
+const app = express();
 
 // const httpServer = http.createServer(app);
 
@@ -62,32 +65,60 @@ const apolloServer = new ApolloServer<ApolloContextValue>({
   // plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
-export { apolloServer };
+apolloServer.startInBackgroundHandlingStartupErrorsByLoggingAndFailingAllRequests();
 
-export default startServerAndCreateLambdaHandler(
-  apolloServer,
-  handlers.createAPIGatewayProxyEventV2RequestHandler(),
-  {
-    context: async () => {
-      return {
-        dataSources,
-      };
-    },
-  }
-);
+// export { apolloServer };
 
-// await apolloServer.start();
-
-// app.use(
-//   bodyParser.json(),
-//   expressMiddleware(apolloServer, {
+// export default startServerAndCreateLambdaHandler(
+//   apolloServer,
+//   handlers.createAPIGatewayProxyEventV2RequestHandler(),
+//   {
 //     context: async () => {
 //       return {
 //         dataSources,
 //       };
 //     },
-//   })
+//   }
 // );
+
+// await apolloServer.start();
+
+app.use(
+  bodyParser.json(),
+  expressMiddleware(apolloServer, {
+    context: async () => {
+      return {
+        dataSources,
+      };
+    },
+  })
+);
+
+let serverlessExpressInstance: Handler<any, unknown>;
+
+async function asyncTask() {
+  await connectDatabase();
+  return true;
+}
+
+async function setup(
+  event: any,
+  context: Context,
+  callback: Callback<unknown>
+): Promise<void | unknown> {
+  const asyncValue = await asyncTask();
+  console.log('database connection result', asyncValue);
+  serverlessExpressInstance = serverlessExpress({ app });
+  return serverlessExpressInstance(event, context, callback);
+}
+
+function handler(event: any, context: Context): void | unknown {
+  if (serverlessExpressInstance) return serverlessExpressInstance(event, context, () => {});
+
+  return setup(event, context, () => {});
+}
+
+exports.handler = handler;
 
 // app.listen(() => {
 
