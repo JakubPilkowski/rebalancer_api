@@ -17,7 +17,6 @@ import { Handler, Context, Callback } from 'aws-lambda';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 // import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-import { startServerAndCreateLambdaHandler, handlers } from '@as-integrations/aws-lambda';
 
 /**
  * graphql schema, resolvers
