@@ -1,3 +1,3 @@
-import { readFileSync } from 'fs';
+import schema from './schema.graphql';
 
-export default readFileSync('./src/graphql/schema/schema.graphql', { encoding: 'utf-8' });
+export default schema;
