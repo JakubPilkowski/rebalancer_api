@@ -83,9 +83,12 @@ app.use(
 );
 
 let serverlessExpressInstance: Handler<any, unknown>;
+let conn: Connection | null = null;
 
 async function asyncTask() {
-  await connectDatabase();
+  if (!conn) {
+    conn = await connectDatabase();
+  }
   return true;
 }
 
@@ -100,6 +103,8 @@ async function setup(
 }
 
 function handler(event: any, context: Context): void | unknown {
+  context.callbackWaitsForEmptyEventLoop = false;
+
   if (serverlessExpressInstance)
     return serverlessExpressInstance({ ...event, requestContext: context }, context, () => {});
 
