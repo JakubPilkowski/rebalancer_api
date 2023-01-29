@@ -18,13 +18,13 @@ import { ApolloServer } from '@apollo/server';
 /**
  * graphql schema, resolvers
  */
-import graphqlSchema from './graphql/schema';
-import graphqlResolvers from './graphql/resolvers';
+import graphqlSchema from './src/graphql/schema';
+import graphqlResolvers from './src/graphql/resolvers';
 
 /**
  * data sources
  */
-import dataSources, { IDataSources } from './dataSources';
+import dataSources, { IDataSources } from './src/dataSources';
 
 export interface ApolloContextValue {
   dataSources: IDataSources;

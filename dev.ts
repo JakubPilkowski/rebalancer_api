@@ -3,7 +3,7 @@ import express from 'express';
 
 import { expressMiddleware } from '@apollo/server/express4';
 
-import apolloServer from './src/createServer';
+import apolloServer from './createServer';
 import dataSources from './src/dataSources';
 
 const startApplication = async (): Promise<void> => {

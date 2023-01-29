@@ -1,5 +1,8 @@
 const nodeExternals = require('webpack-node-externals');
 
+/**
+ * webpack v5.0.0
+ */
 module.exports = {
   module: {
     rules: [
@@ -11,4 +14,8 @@ module.exports = {
     ],
   },
   externals: [nodeExternals()],
+  output: {
+    // hashFunction: 'xxhash64',
+    hashFunction: 'sha256',
+  },
 };

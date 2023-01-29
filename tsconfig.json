@@ -40,6 +40,6 @@
     // "declarationMap": true
     "outDir": "./functions"
   },
-  "include": ["./src/**/*"],
+  "include": ["./src/**/*", "createServer.ts"],
   "exclude": ["node_modules", "./webpack.config.js", "functions"]
 }

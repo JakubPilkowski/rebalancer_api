@@ -12,6 +12,7 @@
     "build:local": "babel ./src --extensions .ts -d ./dist",
     "start:local": "node ./dist/index.js",
     "build": "netlify-lambda build --config ./webpack.functions.js src",
+    "start": "netlify-lambda serve --config ./webpack.functions.js src",
     "prepare": "husky install"
   },
   "author": "",

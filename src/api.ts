@@ -5,7 +5,7 @@ import mongoose, { Connection } from 'mongoose';
 
 import express from 'express';
 import bodyParser from 'body-parser';
-import serverlessExpress from '@vendia/serverless-express';
+import serverlessExpress, { getCurrentInvoke } from '@vendia/serverless-express';
 import { Handler, Context, Callback } from 'aws-lambda';
 
 // import http from 'http';
@@ -85,8 +85,14 @@ apolloServer.startInBackgroundHandlingStartupErrorsByLoggingAndFailingAllRequest
 app.use(
   bodyParser.json(),
   expressMiddleware(apolloServer, {
-    context: async () => {
+    context: async ({ req, res }) => {
+      const { event, context } = getCurrentInvoke();
+
       return {
+        expressRequest: req,
+        expressResponse: res,
+        lambdaEvent: event,
+        lambdaContext: context,
         dataSources,
       };
     },
