@@ -14,8 +14,4 @@ module.exports = {
     ],
   },
   externals: [nodeExternals()],
-  output: {
-    // hashFunction: 'xxhash64',
-    hashFunction: 'sha256',
-  },
 };

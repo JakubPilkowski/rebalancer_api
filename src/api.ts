@@ -7,16 +7,13 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import serverlessExpress, { getCurrentInvoke } from '@vendia/serverless-express';
 import { Handler, Context, Callback } from 'aws-lambda';
-
-// import http from 'http';
-// import serverless from 'serverless-http';
+import cors from 'cors';
 
 /**
  * Apollo server
  */
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
-// import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 
 /**
  * graphql schema, resolvers
@@ -51,12 +48,7 @@ const connectDatabase = async (): Promise<Connection> => {
   return mongoose.connection;
 };
 
-// const startApplication = async (): Promise<Express.Application> => {
-// connectDatabase();
-
 const app = express();
-
-// const httpServer = http.createServer(app);
 
 const apolloServer = new ApolloServer<ApolloContextValue>({
   typeDefs: graphqlSchema,
@@ -66,23 +58,14 @@ const apolloServer = new ApolloServer<ApolloContextValue>({
 
 apolloServer.startInBackgroundHandlingStartupErrorsByLoggingAndFailingAllRequests();
 
-// export { apolloServer };
-
-// export default startServerAndCreateLambdaHandler(
-//   apolloServer,
-//   handlers.createAPIGatewayProxyEventV2RequestHandler(),
-//   {
-//     context: async () => {
-//       return {
-//         dataSources,
-//       };
-//     },
-//   }
-// );
-
-// await apolloServer.start();
+app.use(
+  cors({
+    origin: ['localhost', '<rebalancer_url>'],
+  })
+);
 
 app.use(
+  '/.netlify/functions/api/graphql',
   bodyParser.json(),
   expressMiddleware(apolloServer, {
     context: async ({ req, res }) => {
@@ -111,33 +94,16 @@ async function setup(
   context: Context,
   callback: Callback<unknown>
 ): Promise<void | unknown> {
-  const asyncValue = await asyncTask();
-  console.log('database connection result', asyncValue);
+  await asyncTask();
   serverlessExpressInstance = serverlessExpress({ app });
   return serverlessExpressInstance(event, context, callback);
 }
 
 function handler(event: any, context: Context): void | unknown {
-  if (serverlessExpressInstance) return serverlessExpressInstance(event, context, () => {});
+  if (serverlessExpressInstance)
+    return serverlessExpressInstance({ ...event, requestContext: context }, context, () => {});
 
-  return setup(event, context, () => {});
+  return setup({ ...event, requestContext: context }, context, () => {});
 }
 
 exports.handler = handler;
-
-// app.listen(() => {
-
-// });
-
-// await new Promise<void>((resolve) => httpServer.listen({ port: 4000 }, resolve)).then(() =>
-//   console.log(`🚀 Server ready`)
-// );
-
-// return app;
-// };
-
-// const server = startApplication();
-
-// export default app;
-
-// exports.handler = serverless(app);

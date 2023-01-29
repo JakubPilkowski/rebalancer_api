@@ -19,6 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "@apollo/server": "^4.3.0",
+    "@types/cors": "^2.8.13",
     "@vendia/serverless-express": "^4.10.1",
     "apollo-datasource-mongodb": "^0.5.4",
     "body-parser": "^1.20.1",
