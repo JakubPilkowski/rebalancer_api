@@ -65,7 +65,7 @@ app.use(
 );
 
 app.use(
-  '/.netlify/functions/api/graphql',
+  '/api/graphql',
   bodyParser.json(),
   expressMiddleware(apolloServer, {
     context: async ({ req, res }) => {

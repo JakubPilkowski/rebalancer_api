@@ -2,6 +2,6 @@
   command = "npm ci && npm run build"
   functions = "functions"
 [[redirects]]
-  from = "/api/*"
+  from = "/api/graphql"
   to = "/.netlify/functions/:splat"
   status = 200
