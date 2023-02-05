@@ -26,7 +26,7 @@ apolloServer.startInBackgroundHandlingStartupErrorsByLoggingAndFailingAllRequest
 
 app.use(
   cors({
-    origin: ['localhost', process.env.REBALANCER_APP as string],
+    origin: process.env.REBALANCER_APP as string,
   })
 );
 
