@@ -1,4 +1,5 @@
 const nodeExternals = require('webpack-node-externals');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 /**
  * webpack v5.0.0
@@ -12,6 +13,9 @@ module.exports = {
         loader: 'graphql-tag/loader',
       },
     ],
+  },
+  resolve: {
+    plugins: [new TsconfigPathsPlugin()],
   },
   externals: [nodeExternals()],
 };

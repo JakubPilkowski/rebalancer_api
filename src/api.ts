@@ -1,8 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import mongoose, { Connection } from 'mongoose';
-
+import { Connection } from 'mongoose';
 import express from 'express';
 import bodyParser from 'body-parser';
 import serverlessExpress, { getCurrentInvoke } from '@vendia/serverless-express';
@@ -12,60 +11,27 @@ import cors from 'cors';
 /**
  * Apollo server
  */
-import { ApolloServer } from '@apollo/server';
+import apolloServer from 'config/createApolloServer';
 import { expressMiddleware } from '@apollo/server/express4';
-
-/**
- * graphql schema, resolvers
- */
-import graphqlSchema from './graphql/schema';
-import graphqlResolvers from './graphql/resolvers';
 
 /**
  * data sources
  */
-import dataSources, { IDataSources } from './dataSources';
-
-export interface ApolloContextValue {
-  dataSources: IDataSources;
-}
-
-const connectDatabase = async (): Promise<Connection> => {
-  const mongoDatabase = process.env.MONGODB_URI as string;
-
-  mongoose.set('strictQuery', false);
-
-  await mongoose
-    .connect(mongoDatabase, {
-      // those functions are right now set by default
-      // useNewUrlParser: true,
-      // useFindAndModify: false,
-      // useUnifiedTopology: true,
-    })
-    .then(() => console.log('Connected to mongodb database'))
-    .catch((err: unknown) => console.error(err));
-
-  return mongoose.connection;
-};
+import dataSources from 'dataSources';
+import connectDatabase from 'config/connectDatabase';
 
 const app = express();
-
-const apolloServer = new ApolloServer<ApolloContextValue>({
-  typeDefs: graphqlSchema,
-  resolvers: graphqlResolvers,
-  // plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-});
 
 apolloServer.startInBackgroundHandlingStartupErrorsByLoggingAndFailingAllRequests();
 
 app.use(
   cors({
-    origin: ['localhost', '<rebalancer_url>'],
+    origin: ['localhost', process.env.REBALANCER_APP as string],
   })
 );
 
 app.use(
-  '/api/graphql',
+  '/.netlify/functions/api/graphql',
   bodyParser.json(),
   expressMiddleware(apolloServer, {
     context: async ({ req, res }) => {
@@ -82,12 +48,18 @@ app.use(
   })
 );
 
+app.use('/', (_, res) => {
+  res.send(
+    'Welcome to rebalancer api. To use api request redirect to /.netlify/functions/api/graphql path'
+  );
+});
+
 let serverlessExpressInstance: Handler<any, unknown>;
 let conn: Connection | null = null;
 
 async function asyncTask() {
   if (!conn) {
-    conn = await connectDatabase();
+    conn = await connectDatabase({ uri: process.env.MONGODB_URI as string });
   }
   return true;
 }

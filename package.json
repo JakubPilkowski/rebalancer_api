@@ -2,7 +2,7 @@
   "name": "rebalancer_api",
   "version": "1.0.0",
   "description": "",
-  "main": "functions/server.js",
+  "main": "functions/api.js",
   "scripts": {
     "test": "exit 0",
     "generate": "graphql-codegen --config codegen.yml",
@@ -41,10 +41,13 @@
     "@graphql-codegen/typescript-resolvers": "^2.7.12",
     "@types/aws-lambda": "^8.10.110",
     "@types/express": "^4.17.16",
+    "babel-plugin-import-graphql": "^2.8.1",
+    "babel-plugin-module-resolver": "^5.0.0",
     "eslint": "^8.32.0",
     "graphql-tag": "^2.12.6",
     "husky": "^8.0.0",
     "nodemon": "^2.0.20",
+    "tsconfig-paths-webpack-plugin": "^4.0.0",
     "webpack-node-externals": "^3.0.0"
   }
 }

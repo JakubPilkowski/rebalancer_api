@@ -1,25 +1,29 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 import bodyParser from 'body-parser';
 import express from 'express';
 
 import { expressMiddleware } from '@apollo/server/express4';
 
-import apolloServer from './createServer';
-import dataSources from './src/dataSources';
+import dataSources from 'dataSources';
+
+import apolloServer from 'config/createApolloServer';
+import connectDatabase from 'config/connectDatabase';
 
 const startApplication = async (): Promise<void> => {
   const app = express();
 
-  // const httpServer = http.createServer(app);
-
-  // const apolloServer = new ApolloServer<ApolloContextValue>({
-  //   typeDefs: graphqlSchema,
-  //   resolvers: graphqlResolvers,
-  //   // plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-  // });
+  await connectDatabase({ uri: process.env.MONGODB_URI as string });
 
   await apolloServer.start();
 
+  app.listen(4000, () => {
+    console.log('Server ready');
+  });
+
   app.use(
+    '/graphql',
     bodyParser.json(),
     expressMiddleware(apolloServer, {
       context: async () => {
@@ -30,13 +34,9 @@ const startApplication = async (): Promise<void> => {
     })
   );
 
-  app.listen(4000, () => {
-    console.log('Server ready');
+  app.use('/', (_, res) => {
+    res.send('Welcome to rebalancer api. To use api request redirect to /graphql path');
   });
 };
 
 startApplication();
-
-// await new Promise<void>((resolve) => httpServer.listen({ port: 4000 }, resolve)).then(() =>
-//   console.log(`🚀 Server ready`)
-// );
