@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
+import cors from 'cors';
 import bodyParser from 'body-parser';
 import express from 'express';
 
@@ -17,6 +18,8 @@ const startApplication = async (): Promise<void> => {
   await connectDatabase({ uri: process.env.MONGODB_URI as string });
 
   await apolloServer.start();
+
+  app.use(cors());
 
   app.listen(4000, () => {
     console.log('Server ready');
