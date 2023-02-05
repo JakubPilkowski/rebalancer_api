@@ -2,26 +2,36 @@
   "name": "rebalancer_api",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/index.js",
+  "main": "functions/api.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "exit 0",
     "generate": "graphql-codegen --config codegen.yml",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx -c .eslintrc.js --fix",
-    "dev": "nodemon --exec babel-node ./src/index.ts --extensions .ts"
+    "dev": "nodemon --exec babel-node ./dev.ts --extensions .ts",
+    "clean": "rmdir /s /q dist",
+    "build:local": "babel ./src --extensions .ts -d ./dist",
+    "start:local": "node ./dist/index.js",
+    "build": "netlify-lambda build --config ./webpack.functions.js src",
+    "start": "netlify-lambda serve --config ./webpack.functions.js src",
+    "prepare": "husky install"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@apollo/server": "^4.3.0",
+    "@types/cors": "^2.8.13",
+    "@vendia/serverless-express": "^4.10.1",
     "apollo-datasource-mongodb": "^0.5.4",
     "body-parser": "^1.20.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "graphql": "^16.6.0",
-    "mongoose": "^6.8.3"
+    "mongoose": "^6.8.3",
+    "netlify-lambda": "^2.0.15"
   },
   "devDependencies": {
+    "@babel/cli": "^7.20.7",
     "@babel/core": "^7.20.12",
     "@babel/node": "^7.20.7",
     "@babel/preset-env": "^7.20.2",
@@ -29,7 +39,15 @@
     "@graphql-codegen/cli": "^2.16.4",
     "@graphql-codegen/typescript": "^2.8.7",
     "@graphql-codegen/typescript-resolvers": "^2.7.12",
+    "@types/aws-lambda": "^8.10.110",
+    "@types/express": "^4.17.16",
+    "babel-plugin-import-graphql": "^2.8.1",
+    "babel-plugin-module-resolver": "^5.0.0",
     "eslint": "^8.32.0",
-    "nodemon": "^2.0.20"
+    "graphql-tag": "^2.12.6",
+    "husky": "^8.0.0",
+    "nodemon": "^2.0.20",
+    "tsconfig-paths-webpack-plugin": "^4.0.0",
+    "webpack-node-externals": "^3.0.0"
   }
 }

@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { ApolloContextValue } from '../index';
+import { ApolloContextValue } from '../api';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -25,7 +25,6 @@ export type Mutation = {
   createWallet?: Maybe<Wallet>;
 };
 
-
 export type MutationCreateWalletArgs = {
   input: CreateWalletInput;
 };
@@ -35,7 +34,6 @@ export type Query = {
   wallet: Wallet;
   wallets?: Maybe<Array<Wallet>>;
 };
-
 
 export type QueryWalletArgs = {
   id: Scalars['String'];
@@ -49,15 +47,14 @@ export type Wallet = {
   name: Scalars['String'];
 };
 
-
-
 export type ResolverTypeWrapper<T> = Promise<T> | T;
-
 
 export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
   resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
 };
-export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
+export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
+  | ResolverFn<TResult, TParent, TContext, TArgs>
+  | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -80,7 +77,13 @@ export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
-export interface SubscriptionSubscriberObject<TResult, TKey extends string, TParent, TContext, TArgs> {
+export interface SubscriptionSubscriberObject<
+  TResult,
+  TKey extends string,
+  TParent,
+  TContext,
+  TArgs
+> {
   subscribe: SubscriptionSubscribeFn<{ [key in TKey]: TResult }, TParent, TContext, TArgs>;
   resolve?: SubscriptionResolveFn<TResult, { [key in TKey]: TResult }, TContext, TArgs>;
 }
@@ -94,7 +97,13 @@ export type SubscriptionObject<TResult, TKey extends string, TParent, TContext, 
   | SubscriptionSubscriberObject<TResult, TKey, TParent, TContext, TArgs>
   | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>;
 
-export type SubscriptionResolver<TResult, TKey extends string, TParent = {}, TContext = {}, TArgs = {}> =
+export type SubscriptionResolver<
+  TResult,
+  TKey extends string,
+  TParent = {},
+  TContext = {},
+  TArgs = {}
+> =
   | ((...args: any[]) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
   | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>;
 
@@ -104,7 +113,11 @@ export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
   info: GraphQLResolveInfo
 ) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
 
-export type IsTypeOfResolverFn<T = {}, TContext = {}> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
+export type IsTypeOfResolverFn<T = {}, TContext = {}> = (
+  obj: T,
+  context: TContext,
+  info: GraphQLResolveInfo
+) => boolean | Promise<boolean>;
 
 export type NextResolverFn<T> = () => Promise<T>;
 
@@ -138,16 +151,35 @@ export type ResolversParentTypes = {
   Wallet: Wallet;
 };
 
-export type MutationResolvers<ContextType = ApolloContextValue, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  createWallet?: Resolver<Maybe<ResolversTypes['Wallet']>, ParentType, ContextType, RequireFields<MutationCreateWalletArgs, 'input'>>;
+export type MutationResolvers<
+  ContextType = ApolloContextValue,
+  ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
+> = {
+  createWallet?: Resolver<
+    Maybe<ResolversTypes['Wallet']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateWalletArgs, 'input'>
+  >;
 };
 
-export type QueryResolvers<ContextType = ApolloContextValue, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  wallet?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<QueryWalletArgs, 'id'>>;
+export type QueryResolvers<
+  ContextType = ApolloContextValue,
+  ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
+> = {
+  wallet?: Resolver<
+    ResolversTypes['Wallet'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryWalletArgs, 'id'>
+  >;
   wallets?: Resolver<Maybe<Array<ResolversTypes['Wallet']>>, ParentType, ContextType>;
 };
 
-export type WalletResolvers<ContextType = ApolloContextValue, ParentType extends ResolversParentTypes['Wallet'] = ResolversParentTypes['Wallet']> = {
+export type WalletResolvers<
+  ContextType = ApolloContextValue,
+  ParentType extends ResolversParentTypes['Wallet'] = ResolversParentTypes['Wallet']
+> = {
   _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   currency?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -160,4 +192,3 @@ export type Resolvers<ContextType = ApolloContextValue> = {
   Query?: QueryResolvers<ContextType>;
   Wallet?: WalletResolvers<ContextType>;
 };
-

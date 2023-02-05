@@ -2,3 +2,7 @@ node_modules/
 dist
 coverage
 .env
+# Local Netlify folder
+.netlify
+build
+functions

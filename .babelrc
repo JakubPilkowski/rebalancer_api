@@ -1,3 +1,21 @@
 {
-  "presets": ["@babel/preset-typescript", "@babel/preset-env"]
+  "presets": ["@babel/preset-typescript", ["@babel/preset-env", { "targets": { "node": true } }]],
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "alias": {
+          "resolvers": "./src/resolvers",
+          "dataSources": "./src/dataSources",
+          "models": "./src/models",
+          "config": "./src/config",
+          "schema": "./src/schema"
+        }
+      }
+    ],
+    "import-graphql",
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-transform-object-assign",
+    "@babel/plugin-proposal-object-rest-spread"
+  ]
 }

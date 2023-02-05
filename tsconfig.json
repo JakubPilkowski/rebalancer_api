@@ -33,12 +33,20 @@
     "skipLibCheck": true,
     "jsx": "react",
     // "noEmit": true,
-    "target": "ES5"
+    "target": "ES5",
     // "sourceMap": true
     // "declaration": true,
     // "declarationDir": "./src/types",
     // "declarationMap": true
+    "outDir": "./functions",
+    "paths": {
+      "resolvers/*": ["./resolvers/*"],
+      "dataSources/*": ["./dataSources/*"],
+      "models/*": ["./models/*"],
+      "config/*": ["./config/*"],
+      "schema/*": ["./schema/*"]
+    }
   },
-  "include": ["./src/**/*"],
-  "exclude": ["node_modules", "./webpack.config.js"]
+  "include": ["./src/**/*", "./dev.ts"],
+  "exclude": ["node_modules", "./webpack.config.js", "functions"]
 }
