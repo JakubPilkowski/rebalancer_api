@@ -1,3 +1,6 @@
+import { IRebalanceStrategyAttributes } from 'models/RebalanceStrategyModel';
+import { IShareAttributes } from 'models/ShareModel';
+import { IWalletDepositAttributes } from 'models/WalletDeposit';
 import mongoose, { Document, ObjectId } from 'mongoose';
 
 const Schema = mongoose.Schema;
@@ -23,6 +26,11 @@ export interface IWalletModel extends IWalletAttributes {
 export interface IWalletAttributes {
   name: string;
   currency: string;
+  connections: IConnectionAttributes[];
+  strategy: IRebalanceStrategyAttributes;
+  shares: IShareAttributes[];
+  deposits: IWalletDepositAttributes[];
+  // notifications: Notification[];
   createdAt: NativeDate;
 }
 
