@@ -26,10 +26,7 @@ export interface IRebalanceStrategyModel extends IRebalanceStrategyAttributes {
 }
 
 export interface IRebalanceStrategyAttributes {
-  name: string;
-  currency: string;
-  wage: number;
-  createdAt: NativeDate;
+  wages: Wage[];
 }
 
 export type IRebalanceStrategyDocument = Document<unknown, any, IRebalanceStrategyModel> &
