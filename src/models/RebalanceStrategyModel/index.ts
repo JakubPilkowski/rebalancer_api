@@ -1,32 +1,35 @@
-import mongoose, { Document, ObjectId } from 'mongoose';
+import mongoose, { Document, ObjectId, Types } from 'mongoose';
+
+import IEntityAttributes from 'core/IEntityAttributes';
+import ITimestampAttributes from 'core/ITimestampAttributes';
+import IApiNodeAttributes from 'core/IApiNodeAttributes';
+
+import { DepositSchema, IApiDeposit, IDepositModel } from 'models/DepositModel';
+import { IAPiPeriod, IPeriodModel, PeriodSchema } from 'models/PeriodModel';
 
 const Schema = mongoose.Schema;
 
-const RebalanceStrategySchema = new Schema<IRebalanceStrategyModel>(
+export const RebalanceStrategySchema = new Schema<IRebalanceStrategyModel>(
   {
-    name: {
-      type: String,
-      required: true,
-    },
-    currency: {
-      type: String,
-      required: true,
-    },
-    // orders: {},
-    wage: {
-      type: Number,
-      required: true,
-    },
+    period: PeriodSchema,
+    periodDeposit: DepositSchema,
   },
   { timestamps: true }
 );
 
-export interface IRebalanceStrategyModel extends IRebalanceStrategyAttributes {
-  _id: ObjectId;
-}
+export interface IRebalanceStrategyModel
+  extends IEntityAttributes,
+    IRebalanceStrategyAttributes,
+    ITimestampAttributes {}
 
 export interface IRebalanceStrategyAttributes {
-  wages: Wage[];
+  period: Types.Subdocument<IPeriodModel>;
+  periodDeposit: Types.Subdocument<IDepositModel>;
+}
+
+export interface IApiRebalanceStrategy extends IApiNodeAttributes {
+  period: IAPiPeriod;
+  periodDeposit: IApiDeposit;
 }
 
 export type IRebalanceStrategyDocument = Document<unknown, any, IRebalanceStrategyModel> &

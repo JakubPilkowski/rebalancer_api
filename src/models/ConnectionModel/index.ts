@@ -1,34 +1,34 @@
 import mongoose, { Document, ObjectId } from 'mongoose';
 
+import ITimestampAttributes from 'core/ITimestampAttributes';
+import IEntityAttributes from 'core/IEntityAttributes';
+import IApiNodeAttributes from 'core/IApiNodeAttributes';
+
 const Schema = mongoose.Schema;
 
-const ConnectionSchema = new Schema<IConnectionModel>(
+export const ConnectionSchema = new Schema<IConnectionModel>(
   {
-    name: {
+    broker: {
       type: String,
-      required: true,
-    },
-    currency: {
-      type: String,
-      required: true,
-    },
-    // orders: {},
-    wage: {
-      type: Number,
       required: true,
     },
   },
   { timestamps: true }
 );
 
-export interface IConnectionModel extends IConnectionAttributes {
-  _id: ObjectId;
-}
+export interface IConnectionModel
+  extends IEntityAttributes,
+    IConnectionAttributes,
+    ITimestampAttributes {}
 
-export type IConnectionProvider = 'XTB';
+export type IConnectionBroker = 'XTB';
 
 export interface IConnectionAttributes {
-  provider: IConnectionProvider;
+  broker: IConnectionBroker;
+}
+
+export interface IApiConnection extends IApiNodeAttributes {
+  broker: IConnectionBroker;
 }
 
 export type IConnectionDocument = Document<unknown, any, IConnectionModel> &
