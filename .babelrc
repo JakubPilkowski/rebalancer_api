@@ -9,7 +9,8 @@
           "dataSources": "./src/dataSources",
           "models": "./src/models",
           "config": "./src/config",
-          "schema": "./src/schema"
+          "schema": "./src/schema",
+          "core": "./src/core"
         }
       }
     ],

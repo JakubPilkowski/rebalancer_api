@@ -44,7 +44,8 @@
       "dataSources/*": ["./dataSources/*"],
       "models/*": ["./models/*"],
       "config/*": ["./config/*"],
-      "schema/*": ["./schema/*"]
+      "schema/*": ["./schema/*"],
+      "core/*": ["./core/*"]
     }
   },
   "include": ["./src/**/*", "./dev.ts"],

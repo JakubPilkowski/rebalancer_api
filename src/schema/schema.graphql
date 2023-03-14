@@ -1,13 +1,104 @@
-type Wallet {
-  _id: ID!
-  name: String!
+enum ConnectionBroker {
+  XTB
+}
+
+type Connection {
+  id: ID!
+  broker: ConnectionBroker!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Deposit {
+  id: ID!
+  value: Float!
   currency: String!
   createdAt: String!
+  updatedAt: String!
+}
+
+type Notification {
+  id: ID!
+  daysBeforeNotify: Int!
+  createdAt: String!
+  updatedAt: String!
+}
+
+enum PeriodUnit {
+  MONTH
+  YEAR
+}
+
+type Period {
+  id: ID!
+  value: Int!
+  unit: PeriodUnit!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type RebalanceStrategy {
+  id: ID!
+  period: Period!
+  periodDeposit: Deposit!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type WalletSettings {
+  id: ID!
+  hasNotificationsSilenced: Boolean!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Share {
+  id: ID!
+  ticker: String!
+  wage: Float!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Wallet {
+  id: ID!
+  name: String!
+  currency: String!
+  connections: [Connection]!
+  strategy: RebalanceStrategy!
+  shares: [Share]!
+  settings: WalletSettings!
+  notifications: [Notification]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input CreateWalletShareInput {
+  ticker: String!
+  wage: Float!
 }
 
 input CreateWalletInput {
   name: String!
   currency: String!
+  broker: String!
+  periodValue: Int!
+  periodUnit: PeriodUnit!
+  periodDeposit: Float!
+  shares: [CreateWalletShareInput]!
+  notifications: [Int]!
+}
+
+type CreateWalletPayload {
+  wallet: Wallet!
+}
+
+input DeleteWalletInput {
+  walletId: ID!
+}
+
+type DeleteWalletPayload {
+  walletId: ID!
 }
 
 type Query {
@@ -16,5 +107,6 @@ type Query {
 }
 
 type Mutation {
-  createWallet(input: CreateWalletInput!): Wallet
+  createWallet(input: CreateWalletInput!): CreateWalletPayload
+  deleteWallet(input: DeleteWalletInput!): DeleteWalletPayload
 }
