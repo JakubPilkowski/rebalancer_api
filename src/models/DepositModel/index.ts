@@ -1,4 +1,4 @@
-import mongoose, { Document, ObjectId } from 'mongoose';
+import mongoose, { Document, ObjectId, Types } from 'mongoose';
 
 import ITimestampAttributes from 'core/ITimestampAttributes';
 import IEntityAttributes from 'core/IEntityAttributes';
@@ -41,6 +41,8 @@ export type IDepositDocument = Document<unknown, any, IDepositModel> &
   Required<{
     _id: ObjectId;
   }>;
+
+export type IDepositSubdocument = Types.Subdocument & IDepositModel;
 
 const DepositModel = mongoose.model<IDepositAttributes>('Deposit', DepositSchema);
 

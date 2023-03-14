@@ -1,4 +1,4 @@
-import mongoose, { Document, ObjectId } from 'mongoose';
+import mongoose, { Document, ObjectId, Types } from 'mongoose';
 
 import IEntityAttributes from 'core/IEntityAttributes';
 import ITimestampAttributes from 'core/ITimestampAttributes';
@@ -39,6 +39,8 @@ export type IPeriodDocument = Document<unknown, any, IPeriodModel> &
   Required<{
     _id: ObjectId;
   }>;
+
+export type IPeriodSubdocument = Types.Subdocument & IPeriodModel;
 
 const PeriodModel = mongoose.model<IPeriodAttributes>('Period', PeriodSchema);
 

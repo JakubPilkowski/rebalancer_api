@@ -4,8 +4,13 @@ import IEntityAttributes from 'core/IEntityAttributes';
 import ITimestampAttributes from 'core/ITimestampAttributes';
 import IApiNodeAttributes from 'core/IApiNodeAttributes';
 
-import { DepositSchema, IApiDeposit, IDepositModel } from 'models/DepositModel';
-import { IAPiPeriod, IPeriodModel, PeriodSchema } from 'models/PeriodModel';
+import {
+  DepositSchema,
+  IApiDeposit,
+  IDepositModel,
+  IDepositSubdocument,
+} from 'models/DepositModel';
+import { IAPiPeriod, IPeriodModel, IPeriodSubdocument, PeriodSchema } from 'models/PeriodModel';
 
 const Schema = mongoose.Schema;
 
@@ -23,8 +28,8 @@ export interface IRebalanceStrategyModel
     ITimestampAttributes {}
 
 export interface IRebalanceStrategyAttributes {
-  period: Types.Subdocument<IPeriodModel>;
-  periodDeposit: Types.Subdocument<IDepositModel>;
+  period: IPeriodSubdocument;
+  periodDeposit: IDepositSubdocument;
 }
 
 export interface IApiRebalanceStrategy extends IApiNodeAttributes {
@@ -37,6 +42,8 @@ export type IRebalanceStrategyDocument = Document<unknown, any, IRebalanceStrate
   Required<{
     _id: ObjectId;
   }>;
+
+export type IRebalanceStrategySubdocument = Types.Subdocument & IRebalanceStrategyModel;
 
 const RebalanceStrategyModel = mongoose.model<IRebalanceStrategyAttributes>(
   'RebalanceStrategy',

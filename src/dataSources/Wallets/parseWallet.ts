@@ -5,26 +5,12 @@ import { parseWalletSettings } from 'dataSources/WalletSettings';
 
 import parseApiNodeAttributes from 'core/parseApiNodeAttributes';
 
-import { IRebalanceStrategyDocument } from 'models/RebalanceStrategyModel';
-import WalletModel, { IWalletDocument } from 'models/WalletModel';
-import WalletSettingsModel, { IWalletSettingsDocument } from 'models/WalletSettingsModel';
+import { IWalletDocument } from 'models/WalletModel';
 
 export default async function parseWallet(wallet: IWalletDocument): Promise<Wallet> {
-  const { id, name, currency } = wallet;
+  const { id, name, currency, settings, strategy } = wallet;
 
-  // const connections = WalletModel.find().populate('connections');
-
-  const settings = (await WalletSettingsModel.findById(id)) as IWalletSettingsDocument | null;
-
-  if (!settings) {
-    throw new Error(`Cannot parse Wallet document. Settings document is null`);
-  }
-
-  const strategy = (await WalletModel.findById(id)) as IRebalanceStrategyDocument | null;
-
-  if (!strategy) {
-    throw new Error(`Cannot parse Wallet document. Strategy document is null`);
-  }
+  const walletSettings = await parseWalletSettings(settings);
 
   const walletStrategy = await parseRebalanceStrategy(strategy);
 
@@ -34,7 +20,7 @@ export default async function parseWallet(wallet: IWalletDocument): Promise<Wall
     currency,
     connections: [],
     notifications: [],
-    settings: parseWalletSettings(settings),
+    settings: walletSettings,
     shares: [],
     strategy: walletStrategy,
   };

@@ -1,8 +1,8 @@
+import mongoose, { Document, ObjectId, Types } from 'mongoose';
+
 import IApiNodeAttributes from 'core/IApiNodeAttributes';
 import IEntityAttributes from 'core/IEntityAttributes';
 import ITimestampAttributes from 'core/ITimestampAttributes';
-
-import mongoose, { Document, ObjectId } from 'mongoose';
 
 const Schema = mongoose.Schema;
 
@@ -34,6 +34,8 @@ export type IWalletSettingsDocument = Document<unknown, any, IWalletSettingsMode
   Required<{
     _id: ObjectId;
   }>;
+
+export type IWalletSettingsSubdocument = Types.Subdocument & IWalletSettingsModel;
 
 const WalletSettingsModel = mongoose.model<IWalletSettingsAttributes>(
   'WalletSettings',

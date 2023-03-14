@@ -2,9 +2,11 @@ import { Notification } from 'generated/graphql';
 
 import parseApiNodeAttributes from 'core/parseApiNodeAttributes';
 
-import { INotificationDocument } from 'models/NotificationModel';
+import { INotificationDocument, INotificationSubdocument } from 'models/NotificationModel';
 
-export default function parseNotification(document: INotificationDocument): Notification {
+export default function parseNotification(
+  document: INotificationDocument | INotificationSubdocument
+): Notification {
   const { daysBeforeNotify } = document;
   return {
     ...parseApiNodeAttributes(document),

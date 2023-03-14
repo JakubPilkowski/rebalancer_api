@@ -1,4 +1,4 @@
-import mongoose, { Document, ObjectId } from 'mongoose';
+import mongoose, { Document, ObjectId, Types } from 'mongoose';
 
 import ITimestampAttributes from 'core/ITimestampAttributes';
 import IEntityAttributes from 'core/IEntityAttributes';
@@ -36,6 +36,10 @@ export type IConnectionDocument = Document<unknown, any, IConnectionModel> &
   Required<{
     _id: ObjectId;
   }>;
+
+export type IConnectionSubdocument = Types.Subdocument & IConnectionModel;
+
+// export type IConnectionDocumentArrayItem = Types.DocumentArray & IConnectionModel;
 
 const ConnectionModel = mongoose.model<IConnectionAttributes>('Connection', ConnectionSchema);
 

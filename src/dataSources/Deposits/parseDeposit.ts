@@ -2,9 +2,9 @@ import { Deposit } from 'generated/graphql';
 
 import parseApiNodeAttributes from 'core/parseApiNodeAttributes';
 
-import { IDepositDocument } from 'models/DepositModel';
+import { IDepositDocument, IDepositSubdocument } from 'models/DepositModel';
 
-export default function parseDeposit(document: IDepositDocument): Deposit {
+export default function parseDeposit(document: IDepositDocument | IDepositSubdocument): Deposit {
   const { value, currency } = document;
   return {
     ...parseApiNodeAttributes(document),

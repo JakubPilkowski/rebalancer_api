@@ -1,4 +1,4 @@
-import mongoose, { Document, ObjectId, Types } from 'mongoose';
+import mongoose, { Document, Types } from 'mongoose';
 
 import ITimestampAttributes from 'core/ITimestampAttributes';
 import IEntityAttributes from 'core/IEntityAttributes';
@@ -6,7 +6,7 @@ import IApiNodeAttributes from 'core/IApiNodeAttributes';
 
 import {
   IApiRebalanceStrategy,
-  IRebalanceStrategyModel,
+  IRebalanceStrategySubdocument,
   RebalanceStrategySchema,
 } from 'models/RebalanceStrategyModel';
 import { IApiWalletShare, IWalletShareModel, WalletShareSchema } from 'models/WalletShareModel';
@@ -14,7 +14,7 @@ import { IApiNotification, INotificationModel, NotificationSchema } from 'models
 import { ConnectionSchema, IApiConnection } from 'models/ConnectionModel';
 import {
   IApiWalletSettings,
-  IWalletSettingsModel,
+  IWalletSettingsSubdocument,
   WalletSettingsSchema,
 } from 'models/WalletSettingsModel';
 
@@ -49,13 +49,13 @@ export interface IWalletAttributes {
   /**
    * wallet strategy
    */
-  strategy: Types.Subdocument<IRebalanceStrategyModel>;
+  strategy: IRebalanceStrategySubdocument;
   shares: Types.DocumentArray<IWalletShareModel>;
   /**
    * probably xtb should give access to this
    */
   // deposits: IWalletDepositAttributes[];
-  settings: Types.Subdocument<IWalletSettingsModel>;
+  settings: IWalletSettingsSubdocument;
   notifications: Types.DocumentArray<INotificationModel>[];
 }
 

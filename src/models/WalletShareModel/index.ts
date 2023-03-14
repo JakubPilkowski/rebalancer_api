@@ -1,7 +1,8 @@
+import mongoose, { Document, ObjectId, Types } from 'mongoose';
+
 import IApiNodeAttributes from 'core/IApiNodeAttributes';
 import IEntityAttributes from 'core/IEntityAttributes';
 import ITimestampAttributes from 'core/ITimestampAttributes';
-import mongoose, { Document, ObjectId } from 'mongoose';
 
 const Schema = mongoose.Schema;
 
@@ -39,6 +40,8 @@ export type IWalletShareDocument = Document<unknown, any, IWalletShareModel> &
   Required<{
     _id: ObjectId;
   }>;
+
+export type IWalletShareSubdocument = Types.Subdocument & IWalletShareModel;
 
 const WalletShareModel = mongoose.model<IWalletShareAttributes>('WalletShare', WalletShareSchema);
 

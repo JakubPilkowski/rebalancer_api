@@ -1,4 +1,4 @@
-import mongoose, { Document, ObjectId } from 'mongoose';
+import mongoose, { Document, ObjectId, Types } from 'mongoose';
 
 import ITimestampAttributes from 'core/ITimestampAttributes';
 import IEntityAttributes from 'core/IEntityAttributes';
@@ -34,6 +34,8 @@ export type INotificationDocument = Document<unknown, any, INotificationModel> &
   Required<{
     _id: ObjectId;
   }>;
+
+export type INotificationSubdocument = Types.Subdocument & INotificationModel;
 
 const NotificationModel = mongoose.model<INotificationAttributes>(
   'Notification',
