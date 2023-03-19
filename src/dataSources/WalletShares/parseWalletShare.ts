@@ -7,9 +7,10 @@ import { IWalletShareDocument, IWalletShareSubdocument } from 'models/WalletShar
 export default function parseWalletShare(
   document: IWalletShareDocument | IWalletShareSubdocument
 ): Share {
-  const { ticker, wage } = document;
+  const { ticker, isIncluded, wage } = document;
   return {
     ...parseApiNodeAttributes(document),
+    isIncluded,
     ticker,
     wage,
   };

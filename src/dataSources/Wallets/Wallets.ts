@@ -24,12 +24,10 @@ export default class Wallets extends MongoDataSource<IWalletModel> {
   public async getWallets(): Promise<Wallet[]> {
     const model = this.getModel();
     const wallets = await model.find();
-    const results = Promise.all(
-      wallets.map<Promise<Wallet>>(async (wallet) => {
-        const result = await parseWallet(wallet);
-        return result;
-      })
-    );
+    const results = wallets.map<Wallet>((wallet) => {
+      const result = parseWallet(wallet);
+      return result;
+    });
     return results;
   }
 

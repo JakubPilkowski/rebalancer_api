@@ -10,9 +10,9 @@ import {
   IRebalanceStrategySubdocument,
 } from 'models/RebalanceStrategyModel';
 
-export default async function parseRebalanceStrategy(
+export default function parseRebalanceStrategy(
   document: IRebalanceStrategyDocument | IRebalanceStrategySubdocument
-): Promise<RebalanceStrategy> {
+): RebalanceStrategy {
   const { period, periodDeposit } = document;
 
   return {

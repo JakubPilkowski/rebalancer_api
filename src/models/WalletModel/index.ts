@@ -11,7 +11,7 @@ import {
 } from 'models/RebalanceStrategyModel';
 import { IApiWalletShare, IWalletShareModel, WalletShareSchema } from 'models/WalletShareModel';
 import { IApiNotification, INotificationModel, NotificationSchema } from 'models/NotificationModel';
-import { ConnectionSchema, IApiConnection } from 'models/ConnectionModel';
+import { ConnectionSchema, IApiConnection, IConnectionModel } from 'models/ConnectionModel';
 import {
   IApiWalletSettings,
   IWalletSettingsSubdocument,
@@ -32,6 +32,10 @@ export const WalletSchema = new Schema<IWalletModel>(
     },
     connections: [ConnectionSchema],
     strategy: RebalanceStrategySchema,
+    wageStatus: {
+      type: String,
+      required: true,
+    },
     shares: [WalletShareSchema],
     settings: WalletSettingsSchema,
     notifications: [NotificationSchema],
@@ -41,22 +45,29 @@ export const WalletSchema = new Schema<IWalletModel>(
 
 export interface IWalletModel extends IEntityAttributes, IWalletAttributes, ITimestampAttributes {}
 
+/**
+ * UNSET - wages are not set
+ * READY - wages are set
+ */
+export type IWalletWageStatus = 'UNSET' | 'READY';
+
 export interface IWalletAttributes {
   name: string;
   currency: string;
   /** MVP - only one connection */
-  connections: Types.DocumentArray<INotificationModel>[];
+  connections: Types.DocumentArray<IConnectionModel>;
   /**
    * wallet strategy
    */
   strategy: IRebalanceStrategySubdocument;
   shares: Types.DocumentArray<IWalletShareModel>;
+  wageStatus: IWalletWageStatus;
   /**
    * probably xtb should give access to this
    */
   // deposits: IWalletDepositAttributes[];
   settings: IWalletSettingsSubdocument;
-  notifications: Types.DocumentArray<INotificationModel>[];
+  notifications: Types.DocumentArray<INotificationModel>;
 }
 
 export interface IApiWallet extends IApiNodeAttributes {
@@ -66,14 +77,11 @@ export interface IApiWallet extends IApiNodeAttributes {
   strategy: IApiRebalanceStrategy;
   shares: IApiWalletShare[];
   settings: IApiWalletSettings;
+  wageStatus: IWalletWageStatus;
   notifications: IApiNotification[];
 }
 
 export type IWalletDocument = Document<unknown, any, IWalletModel> & IWalletModel;
-// &
-// Required<{
-//   _id: ObjectId;
-// }>;
 
 const WalletModel = mongoose.model<IWalletAttributes>('Wallet', WalletSchema);
 

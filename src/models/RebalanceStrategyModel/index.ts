@@ -4,13 +4,8 @@ import IEntityAttributes from 'core/IEntityAttributes';
 import ITimestampAttributes from 'core/ITimestampAttributes';
 import IApiNodeAttributes from 'core/IApiNodeAttributes';
 
-import {
-  DepositSchema,
-  IApiDeposit,
-  IDepositModel,
-  IDepositSubdocument,
-} from 'models/DepositModel';
-import { IAPiPeriod, IPeriodModel, IPeriodSubdocument, PeriodSchema } from 'models/PeriodModel';
+import { DepositSchema, IApiDeposit, IDepositSubdocument } from 'models/DepositModel';
+import { IAPiPeriod, IPeriodSubdocument, PeriodSchema } from 'models/PeriodModel';
 
 const Schema = mongoose.Schema;
 

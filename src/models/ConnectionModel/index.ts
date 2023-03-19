@@ -39,8 +39,6 @@ export type IConnectionDocument = Document<unknown, any, IConnectionModel> &
 
 export type IConnectionSubdocument = Types.Subdocument & IConnectionModel;
 
-// export type IConnectionDocumentArrayItem = Types.DocumentArray & IConnectionModel;
-
 const ConnectionModel = mongoose.model<IConnectionAttributes>('Connection', ConnectionSchema);
 
 export default ConnectionModel;

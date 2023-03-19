@@ -12,6 +12,10 @@ export const WalletShareSchema = new Schema<IWalletShareModel>(
       type: String,
       required: true,
     },
+    isIncluded: {
+      type: Boolean,
+      required: true,
+    },
     wage: {
       type: Number,
       required: true,
@@ -27,11 +31,16 @@ export interface IWalletShareModel
 
 export interface IWalletShareAttributes {
   ticker: string;
+  /**
+   * Indicates whether given share is included in wallet
+   */
+  isIncluded: boolean;
   wage: number;
 }
 
 export interface IApiWalletShare extends IApiNodeAttributes {
   ticker: string;
+  isIncluded: boolean;
   wage: number;
 }
 

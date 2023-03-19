@@ -19,7 +19,7 @@ type Deposit {
 
 type Notification {
   id: ID!
-  daysBeforeNotify: Int!
+  daysBeforeNotify: [Int]!
   createdAt: String!
   updatedAt: String!
 }
@@ -55,9 +55,15 @@ type WalletSettings {
 type Share {
   id: ID!
   ticker: String!
+  isIncluded: Boolean!
   wage: Float!
   createdAt: String!
   updatedAt: String!
+}
+
+enum WalletWageStatus {
+  UNSET
+  READY
 }
 
 type Wallet {
@@ -67,6 +73,7 @@ type Wallet {
   connections: [Connection]!
   strategy: RebalanceStrategy!
   shares: [Share]!
+  wageStatus: WalletWageStatus!
   settings: WalletSettings!
   notifications: [Notification]!
   createdAt: String!
@@ -80,12 +87,11 @@ input CreateWalletShareInput {
 
 input CreateWalletInput {
   name: String!
-  currency: String!
   broker: String!
+  currency: String!
   periodValue: Int!
   periodUnit: PeriodUnit!
   periodDeposit: Float!
-  shares: [CreateWalletShareInput]!
   notifications: [Int]!
 }
 

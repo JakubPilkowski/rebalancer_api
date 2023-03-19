@@ -1,6 +1,14 @@
 Zakładka settings:
 
-- zmiana języka
+- język aplikacji
+- waluta krajowa
+- zmiana maila
+- zmiana hasła
 - możliwość usunięcia konta
 
-FICZER: UWZGLĘDNIJ INFLACJĘ (wersja płatna)
+Dodatkowe walidatory:
+
+- UWZGLĘDNIJ INFLACJĘ (wersja płatna)
+- UWZGLĘDNIJ PODATKI
+
+POŁĄCZENIE Z BROKEREM JEST WYMAGANE - wersja mvp

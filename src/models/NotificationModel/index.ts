@@ -8,10 +8,12 @@ const Schema = mongoose.Schema;
 
 export const NotificationSchema = new Schema<INotificationModel>(
   {
-    daysBeforeNotify: {
-      type: Number,
-      required: true,
-    },
+    daysBeforeNotify: [
+      {
+        type: Number,
+        required: true,
+      },
+    ],
   },
   { timestamps: true }
 );
@@ -22,18 +24,14 @@ export interface INotificationModel
     ITimestampAttributes {}
 
 export interface INotificationAttributes {
-  daysBeforeNotify: number;
+  daysBeforeNotify: number[];
 }
 
 export interface IApiNotification extends IApiNodeAttributes {
-  daysBeforeNotify: number;
+  daysBeforeNotify: number[];
 }
 
-export type INotificationDocument = Document<unknown, any, INotificationModel> &
-  INotificationModel &
-  Required<{
-    _id: ObjectId;
-  }>;
+export type INotificationDocument = Document<unknown, any, INotificationModel> & INotificationModel;
 
 export type INotificationSubdocument = Types.Subdocument & INotificationModel;
 

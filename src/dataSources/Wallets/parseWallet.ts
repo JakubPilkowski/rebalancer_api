@@ -1,4 +1,4 @@
-import { Wallet } from 'generated/graphql';
+import { Wallet, WalletWageStatus } from 'generated/graphql';
 
 import parseRebalanceStrategy from 'dataSources/RebalanceStrategies/parseRebalanceStrategy';
 import { parseWalletSettings } from 'dataSources/WalletSettings';
@@ -6,22 +6,35 @@ import { parseWalletSettings } from 'dataSources/WalletSettings';
 import parseApiNodeAttributes from 'core/parseApiNodeAttributes';
 
 import { IWalletDocument } from 'models/WalletModel';
+import { parseConnection } from 'dataSources/Connections';
+import { parseNotification } from 'dataSources/Notifications';
+import { parseWalletShare } from 'dataSources/WalletShares';
 
-export default async function parseWallet(wallet: IWalletDocument): Promise<Wallet> {
-  const { id, name, currency, settings, strategy } = wallet;
+export default function parseWallet(wallet: IWalletDocument): Wallet {
+  const { name, currency, settings, connections, notifications, shares, wageStatus, strategy } =
+    wallet;
 
-  const walletSettings = await parseWalletSettings(settings);
+  const walletWageStatus = wageStatus as WalletWageStatus;
 
-  const walletStrategy = await parseRebalanceStrategy(strategy);
+  const walletSettings = parseWalletSettings(settings);
+
+  const walletStrategy = parseRebalanceStrategy(strategy);
+
+  const walletConnections = connections.map((connection) => parseConnection(connection));
+
+  const walletNotifications = notifications.map((notification) => parseNotification(notification));
+
+  const walletShares = shares.map((share) => parseWalletShare(share));
 
   return {
     ...parseApiNodeAttributes(wallet),
     name,
     currency,
-    connections: [],
-    notifications: [],
+    connections: walletConnections,
+    notifications: walletNotifications,
+    wageStatus: walletWageStatus || 'UNSET',
     settings: walletSettings,
-    shares: [],
+    shares: walletShares,
     strategy: walletStrategy,
   };
 }
