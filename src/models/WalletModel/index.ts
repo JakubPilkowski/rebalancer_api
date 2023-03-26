@@ -17,6 +17,11 @@ import {
   IWalletSettingsSubdocument,
   WalletSettingsSchema,
 } from 'models/WalletSettingsModel';
+import {
+  IApiRebalanceHistory,
+  IRebalanceHistoryModel,
+  RebalanceHistorySchema,
+} from 'models/RebalanceHistoryModel';
 
 const Schema = mongoose.Schema;
 
@@ -36,6 +41,7 @@ export const WalletSchema = new Schema<IWalletModel>(
       type: String,
       required: true,
     },
+    history: [RebalanceHistorySchema],
     shares: [WalletShareSchema],
     settings: WalletSettingsSchema,
     notifications: [NotificationSchema],
@@ -62,6 +68,8 @@ export interface IWalletAttributes {
   strategy: IRebalanceStrategySubdocument;
   shares: Types.DocumentArray<IWalletShareModel>;
   wageStatus: IWalletWageStatus;
+  history: Types.DocumentArray<IRebalanceHistoryModel>;
+  startDate: NativeDate;
   /**
    * probably xtb should give access to this
    */
@@ -76,6 +84,8 @@ export interface IApiWallet extends IApiNodeAttributes {
   connections: IApiConnection[];
   strategy: IApiRebalanceStrategy;
   shares: IApiWalletShare[];
+  history: IApiRebalanceHistory[];
+  startDate: string;
   settings: IApiWalletSettings;
   wageStatus: IWalletWageStatus;
   notifications: IApiNotification[];

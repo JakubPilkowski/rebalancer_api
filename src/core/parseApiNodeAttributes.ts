@@ -2,6 +2,7 @@ import { Document, Types } from 'mongoose';
 
 import IApiNodeAttributes from './IApiNodeAttributes';
 import IModelAttributes from './IModelAttributes';
+import parseDateAttribute from './parseDateAttribute';
 
 type EntityDocument = Document<unknown, any, IModelAttributes> & IModelAttributes;
 
@@ -14,7 +15,7 @@ export default function parseApiNodeAttributes(
 
   return {
     id,
-    createdAt: new Date(createdAt).toISOString(),
-    updatedAt: new Date(updatedAt).toISOString(),
+    createdAt: parseDateAttribute(createdAt),
+    updatedAt: parseDateAttribute(updatedAt),
   };
 }

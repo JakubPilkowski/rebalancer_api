@@ -12,8 +12,8 @@ export const WalletShareSchema = new Schema<IWalletShareModel>(
       type: String,
       required: true,
     },
-    isIncluded: {
-      type: Boolean,
+    status: {
+      type: String,
       required: true,
     },
     wage: {
@@ -29,18 +29,24 @@ export interface IWalletShareModel
     IWalletShareAttributes,
     ITimestampAttributes {}
 
+/**
+ * SKIPPED - doesn't take part in rebalance but its required for equality check
+ * DRAFT - doesn't exist in real account but it takes part in rebalance
+ * DRAFT-SKIPPED - DRAFT + SKIPPED status
+ * INCLUED - exist in real account and it takes part in rebalance
+ */
+export type IWalletShareStatus = 'DRAFT' | 'SKIPPED' | 'SKIPPED-DRAFT' | 'INCLUDED';
+
 export interface IWalletShareAttributes {
   ticker: string;
-  /**
-   * Indicates whether given share is included in wallet
-   */
-  isIncluded: boolean;
+  volume: number;
+  status: IWalletShareStatus;
   wage: number;
 }
 
 export interface IApiWalletShare extends IApiNodeAttributes {
   ticker: string;
-  isIncluded: boolean;
+  status: IWalletShareStatus;
   wage: number;
 }
 

@@ -35,6 +35,7 @@ export type CreateWalletInput = {
   periodDeposit: Scalars['Float'];
   periodUnit: PeriodUnit;
   periodValue: Scalars['Int'];
+  startDate: Scalars['String'];
 };
 
 export type CreateWalletPayload = {
@@ -114,6 +115,19 @@ export type QueryWalletArgs = {
   id: Scalars['String'];
 };
 
+export type RebalanceHistory = {
+  __typename?: 'RebalanceHistory';
+  id: Scalars['ID'];
+  shares: Array<Maybe<Share>>;
+  status: RebalanceHistoryStatus;
+};
+
+export enum RebalanceHistoryStatus {
+  Done = 'DONE',
+  Removed = 'REMOVED',
+  Skipped = 'SKIPPED'
+}
+
 export type RebalanceStrategy = {
   __typename?: 'RebalanceStrategy';
   createdAt: Scalars['String'];
@@ -127,22 +141,32 @@ export type Share = {
   __typename?: 'Share';
   createdAt: Scalars['String'];
   id: Scalars['ID'];
-  isIncluded: Scalars['Boolean'];
+  status: ShareStatus;
   ticker: Scalars['String'];
   updatedAt: Scalars['String'];
+  volume: Scalars['Float'];
   wage: Scalars['Float'];
 };
+
+export enum ShareStatus {
+  Draft = 'DRAFT',
+  Included = 'INCLUDED',
+  Skipped = 'SKIPPED',
+  SkippedDraft = 'SKIPPED_DRAFT'
+}
 
 export type Wallet = {
   __typename?: 'Wallet';
   connections: Array<Maybe<Connection>>;
   createdAt: Scalars['String'];
   currency: Scalars['String'];
+  history: Array<Maybe<RebalanceHistory>>;
   id: Scalars['ID'];
   name: Scalars['String'];
   notifications: Array<Maybe<Notification>>;
   settings: WalletSettings;
   shares: Array<Maybe<Share>>;
+  startDate: Scalars['String'];
   strategy: RebalanceStrategy;
   updatedAt: Scalars['String'];
   wageStatus: WalletWageStatus;
@@ -247,8 +271,11 @@ export type ResolversTypes = {
   Period: ResolverTypeWrapper<Period>;
   PeriodUnit: PeriodUnit;
   Query: ResolverTypeWrapper<{}>;
+  RebalanceHistory: ResolverTypeWrapper<RebalanceHistory>;
+  RebalanceHistoryStatus: RebalanceHistoryStatus;
   RebalanceStrategy: ResolverTypeWrapper<RebalanceStrategy>;
   Share: ResolverTypeWrapper<Share>;
+  ShareStatus: ShareStatus;
   String: ResolverTypeWrapper<Scalars['String']>;
   Wallet: ResolverTypeWrapper<Wallet>;
   WalletSettings: ResolverTypeWrapper<WalletSettings>;
@@ -272,6 +299,7 @@ export type ResolversParentTypes = {
   Notification: Notification;
   Period: Period;
   Query: {};
+  RebalanceHistory: RebalanceHistory;
   RebalanceStrategy: RebalanceStrategy;
   Share: Share;
   String: Scalars['String'];
@@ -333,6 +361,13 @@ export type QueryResolvers<ContextType = ApolloContextValue, ParentType extends 
   wallets?: Resolver<Maybe<Array<ResolversTypes['Wallet']>>, ParentType, ContextType>;
 };
 
+export type RebalanceHistoryResolvers<ContextType = ApolloContextValue, ParentType extends ResolversParentTypes['RebalanceHistory'] = ResolversParentTypes['RebalanceHistory']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  shares?: Resolver<Array<Maybe<ResolversTypes['Share']>>, ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['RebalanceHistoryStatus'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type RebalanceStrategyResolvers<ContextType = ApolloContextValue, ParentType extends ResolversParentTypes['RebalanceStrategy'] = ResolversParentTypes['RebalanceStrategy']> = {
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -345,9 +380,10 @@ export type RebalanceStrategyResolvers<ContextType = ApolloContextValue, ParentT
 export type ShareResolvers<ContextType = ApolloContextValue, ParentType extends ResolversParentTypes['Share'] = ResolversParentTypes['Share']> = {
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  isIncluded?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['ShareStatus'], ParentType, ContextType>;
   ticker?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  volume?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   wage?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -356,11 +392,13 @@ export type WalletResolvers<ContextType = ApolloContextValue, ParentType extends
   connections?: Resolver<Array<Maybe<ResolversTypes['Connection']>>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   currency?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  history?: Resolver<Array<Maybe<ResolversTypes['RebalanceHistory']>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   notifications?: Resolver<Array<Maybe<ResolversTypes['Notification']>>, ParentType, ContextType>;
   settings?: Resolver<ResolversTypes['WalletSettings'], ParentType, ContextType>;
   shares?: Resolver<Array<Maybe<ResolversTypes['Share']>>, ParentType, ContextType>;
+  startDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   strategy?: Resolver<ResolversTypes['RebalanceStrategy'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   wageStatus?: Resolver<ResolversTypes['WalletWageStatus'], ParentType, ContextType>;
@@ -384,6 +422,7 @@ export type Resolvers<ContextType = ApolloContextValue> = {
   Notification?: NotificationResolvers<ContextType>;
   Period?: PeriodResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  RebalanceHistory?: RebalanceHistoryResolvers<ContextType>;
   RebalanceStrategy?: RebalanceStrategyResolvers<ContextType>;
   Share?: ShareResolvers<ContextType>;
   Wallet?: WalletResolvers<ContextType>;

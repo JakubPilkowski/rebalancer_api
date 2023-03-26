@@ -1,4 +1,4 @@
-import { Share } from 'generated/graphql';
+import { Share, ShareStatus } from 'generated/graphql';
 
 import parseApiNodeAttributes from 'core/parseApiNodeAttributes';
 
@@ -7,10 +7,14 @@ import { IWalletShareDocument, IWalletShareSubdocument } from 'models/WalletShar
 export default function parseWalletShare(
   document: IWalletShareDocument | IWalletShareSubdocument
 ): Share {
-  const { ticker, isIncluded, wage } = document;
+  const { ticker, status, volume, wage } = document;
+
+  const shareStatus = status as ShareStatus;
+
   return {
     ...parseApiNodeAttributes(document),
-    isIncluded,
+    status: shareStatus,
+    volume,
     ticker,
     wage,
   };

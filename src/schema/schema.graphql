@@ -45,6 +45,18 @@ type RebalanceStrategy {
   updatedAt: String!
 }
 
+enum RebalanceHistoryStatus {
+  SKIPPED
+  DONE
+  REMOVED
+}
+
+type RebalanceHistory {
+  id: ID!
+  status: RebalanceHistoryStatus!
+  shares: [Share]!
+}
+
 type WalletSettings {
   id: ID!
   hasNotificationsSilenced: Boolean!
@@ -52,10 +64,18 @@ type WalletSettings {
   updatedAt: String!
 }
 
+enum ShareStatus {
+  DRAFT
+  SKIPPED
+  SKIPPED_DRAFT
+  INCLUDED
+}
+
 type Share {
   id: ID!
   ticker: String!
-  isIncluded: Boolean!
+  volume: Float!
+  status: ShareStatus!
   wage: Float!
   createdAt: String!
   updatedAt: String!
@@ -76,6 +96,8 @@ type Wallet {
   wageStatus: WalletWageStatus!
   settings: WalletSettings!
   notifications: [Notification]!
+  history: [RebalanceHistory]!
+  startDate: String!
   createdAt: String!
   updatedAt: String!
 }
@@ -93,6 +115,7 @@ input CreateWalletInput {
   periodUnit: PeriodUnit!
   periodDeposit: Float!
   notifications: [Int]!
+  startDate: String!
 }
 
 type CreateWalletPayload {
